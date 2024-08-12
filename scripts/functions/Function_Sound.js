@@ -109,7 +109,11 @@ function audio_update()
 
     // Update and apply gains
     g_AudioGroups.forEach(_group => _group.gain.update());
-    audio_sampledata.forEach(_asset => _asset.gain.update());
+    audio_sampledata.forEach(_asset => {
+        if (_asset != null) {
+            _asset.gain.update();
+        }
+    });
     audio_sounds.forEach(_voice => _voice.updateGain());
 }
 
@@ -558,6 +562,12 @@ audioSound.prototype.resume = function() {
     }
     else {
         this.startoffset = this.playbackCheckpoint.bufferTime;
+
+        // If we are still decoding then there's nothing to do with the buffer source
+        if (this.pbuffersource === null) {
+            return;
+        }
+        
         this.start(this.pbuffersource.buffer);
     }
 };
@@ -575,11 +585,12 @@ audioSound.prototype.isPlaying = function() {
         return true;
     }
     else {
+        // If the voice is active, but we have no buffer,
+        // then we are decoding and considered to be playing.
         if (this.pbuffersource === null)
-            return false;
+            return true;
 
         //NB- "playbackState" is only defined for webkitAudioContext - undefined for AudioContext
-        // ... we should get rid of it then
         if (this.pbuffersource.playbackState == undefined 
         || this.pbuffersource.playbackState != this.pbuffersource.FINISHED_STATE
         || this.paused) {
@@ -1992,7 +2003,7 @@ function audio_stop_all()
 function audio_group_stop_sounds(_groupId) 
 {
     audio_sounds.filter(_voice => audio_sampledata[_voice.soundid].groupId === _groupId)
-                .forEach(_voice => voice.stop()); 
+                .forEach(_voice => _voice.stop()); 
 }
 
 function audio_pause_all( )
@@ -3105,9 +3116,12 @@ function audio_destroy_stream(_soundid)
             audio_stop_sound(_soundid);
             audio_sampledata[_soundid] = null;
         }
+        
+        return 1;
     }
-}
 
+    return -1;
+}
 
 function allocateBufferSound( )
 {
