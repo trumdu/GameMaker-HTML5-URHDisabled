@@ -1,4 +1,3 @@
-// @if feature("audio_effects")
 function GainEffectStruct(_params) {
     AudioEffectStruct.call(this, AudioEffect.Type.Gain);
     Object.setPrototypeOf(this, AudioEffectStruct.prototype);
@@ -28,4 +27,3 @@ GainEffectStruct.paramDescriptors = () => ({
     bypass: AudioEffectStruct.paramDescriptors().bypass,
     gain:   { name: "gain", integer: false, defaultValue: 0.5, minValue: 0.0, maxValue: Number.MAX_VALUE }
 });
-// @endif

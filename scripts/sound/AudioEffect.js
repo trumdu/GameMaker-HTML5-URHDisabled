@@ -1,4 +1,3 @@
-// @if feature("audio_effects")
 function AudioEffect() {}
 
 AudioEffect.PARAM_TIME_CONSTANT = 0.005; // 5ms
@@ -136,4 +135,3 @@ AudioEffectStruct.prototype.removeNode = function(_node) {
         this.nodes.splice(idx, 1);
     }
 };
-// @endif

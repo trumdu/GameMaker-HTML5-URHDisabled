@@ -1,4 +1,3 @@
-// @if feature("audio_effects")
 function PeakEQEffectStruct(_params) {
     AudioEffectStruct.call(this, AudioEffect.Type.PeakEQ);
     Object.setPrototypeOf(this, AudioEffectStruct.prototype);
@@ -64,4 +63,3 @@ PeakEQEffectStruct.paramDescriptors = () => ({
         return this.__freq;
     } 
 });
-// @endif

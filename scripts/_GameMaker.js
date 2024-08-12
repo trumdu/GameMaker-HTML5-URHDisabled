@@ -167,49 +167,39 @@ function yyUnhandledExceptionHandler( event )
 
 function yyUnhandledRejectionHandler( error )
 {
-	var string = "Unhandled Rejection - " + error.message;
-	print( string );
-	if (error && error['promise']) {
-		error['promise'].catch(function(err){
+	var string =  "Unhandled Rejection - " + error.message;
+	console.error(string);
+	if (error && error.promise) {
+		error.promise.catch(function(err){
 			var _endGame = true;
 			try {
-				if (!err['stack']) {
-					// We have no way to determine the source of the error.
-					_endGame = false;
-				}
-				else {
-					var _urlPos = err['stack'].indexOf("https://");
-					if (_urlPos < 0) _urlPos = err['stack'].indexOf("http://");
-					if (_urlPos >= 0) {
-						var reg_line_split = new RegExp("\\r\\n|\\r|\\n", "g");
-						var _rows = err['stack'].slice(_urlPos).split(reg_line_split);
-						if (_rows.length > 0) {
-							var _url = _rows[0];
-							_urlPos = _url.lastIndexOf("/");
-							if (_urlPos > 0) {
-								var _errUrl = new URL(_url.slice(0, _urlPos + 1));
-								if ((_errUrl['hostname'] != window['location']['hostname']) ||
-									(_errUrl['pathname'].indexOf(g_pGMFile.Options.GameDir) < 0)){
-									// The error is caused by an external resource.
-									_endGame = false;
-								}
+				var _urlPos = err.stack.indexOf("https://");
+				if (_urlPos < 0) _urlPos = err.stack.indexOf("http://");
+				if (_urlPos >= 0) {
+                    var reg_line_split = new RegExp("\\r\\n|\\r|\\n", "g");
+					var _rows = err.stack.slice(_urlPos).split(reg_line_split);
+					if (_rows.length > 0) {
+						var _url = _rows[0];
+						_urlPos = _url.lastIndexOf("/");
+						if (_urlPos > 0) {
+							var _errUrl = new URL(_url.slice(0, _urlPos + 1));
+							if ((_errUrl.hostname != window.location.hostname) ||
+								(_errUrl.pathname.indexOf(g_pGMFile.Options.GameDir) < 0)){
+								// The error is caused by an external resource.
+								_endGame = false;
 							}
 						}
 					}
 				}
 			}
 			catch (e) {
-				console.error("Unhandled Rejection | Promise Processing Error - " + e.message);
+				console.error(e.message);
 			}
 			if (_endGame) {
 				game_end(-2);
 				debugger;
 			}
 		});
-	}
-	else {
-		game_end(-2);
-		debugger;
 	}
 	return false;
 }
@@ -219,7 +209,6 @@ window.addEventListener( "unhandledrejection", yyUnhandledRejectionHandler );
 
 
 //external access for js extensions
-// @if feature("extension_api")
 var GMS_API = {
     "debug_msg": show_debug_message,
     "ds_list_size": ds_list_size,
@@ -231,7 +220,6 @@ var GMS_API = {
     "get_facebook_app_id": YYGetFacebookAppId,
 	"get_app_version_string": YYGetAppVersionString
 };
-// @endif
 
 function YYGetFacebookAppId() {
     return g_pGMFile.Options.Facebook;
@@ -309,7 +297,6 @@ function ToggleDebugPause() {
 ///				
 ///			 </returns>
 // #############################################################################################
-// @if feature("debug")
 function CreateDebugConsole() {
 
     try
@@ -369,7 +356,6 @@ function CreateDebugConsole() {
         debug(e.message);
     }
 }
-// @endif
 
 
 
@@ -576,10 +562,8 @@ function GameMaker_Init()
 	graphics = null;
 	if( !canvas) return;
 	
-    // @if function("parameter_*")
     ParseURL( window.location );
-	// @endif
-    g_pGMFile = JSON_game;
+	g_pGMFile = JSON_game;
 
 	// initialise the map of obfuscated names to var 
 	if (typeof g_var2obf !== "undefined") {
@@ -654,11 +638,9 @@ function GameMaker_Init()
  	g_LastCanvasWidth = canvas.width;
     g_LastCanvasHeight = canvas.height;    
     
-    // @if feature("audio")
     if ((g_pGMFile.Options.UseNewAudio == true) || g_isZeus) {
         g_AudioModel = Audio_WebAudio;
     }
-    // @endif audio
 
     
 
@@ -696,12 +678,10 @@ function GameMaker_Init()
         console.log("using internal runtime facebook");
         YoYoFBInit(g_pGMFile.Options.Facebook);
     }
-    // @if feature("debug")
     else if (g_pGMFile.Options && g_pGMFile.Options.debugMode)
     {
         CreateDebugConsole();
     }
-    // @endif
 
 	// Remember these settings, as FULLSCREEN will mess them up.
 	RememberCanvasSettings();
@@ -832,9 +812,7 @@ function animate() {
             case -2:
                 {
                     if (g_LoadingCanvasCreated) DeleteLoadingCanvas();
-                    // @if feature("gl")
                     yyWebGLRequiredError(graphics, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-                    // @endif gl
                     break;
                 }
 
@@ -866,24 +844,17 @@ function animate() {
                     done = false;
                 }
                 ProcessFileLoading();
-                var _loadingBarCallback = g_LoadingBarCallback;
                 if(g_pGMFile.Options.loadingBarCallback)
                 {
                     if (g_ExtensionTotal == g_ExtensionCount)
                     {
-                        try
-                        {
-                            _loadingBarCallback = eval(g_pGMFile.Options.loadingBarCallback);
-                            g_CustomLoadingBarCallback = _loadingBarCallback;
-                        }
-                        catch (_err)
-                        {
-                            console.error('Invalid loading bar extension "' + g_pGMFile.Options.loadingBarCallback + '", using default!');
-                            console.dir(_err);
-                        }
+                        g_CustomLoadingBarCallback = eval(g_pGMFile.Options.loadingBarCallback);
+                        g_CustomLoadingBarCallback(g_LoadGraphics, DISPLAY_WIDTH, DISPLAY_HEIGHT, g_LoadingTotal, g_LoadingCount, g_LoadingScreen);
                     }
+					
                 }
-                _loadingBarCallback(g_LoadGraphics, DISPLAY_WIDTH, DISPLAY_HEIGHT, g_LoadingTotal, g_LoadingCount, g_LoadingScreen);
+                else
+                    g_LoadingBarCallback(g_LoadGraphics, DISPLAY_WIDTH, DISPLAY_HEIGHT, g_LoadingTotal, g_LoadingCount, g_LoadingScreen);
                 //g_LoadingCount++;
                 break;
 
@@ -1152,23 +1123,15 @@ function StartRoom( _numb, _starting )
     // This must be set before performing the room_end event else the event will be blocked
     New_Room = -1;
     
-    // @if feature("particles") && function("effect_")
     effect_clear();
-    // @endif
-    
-    // @if feature("layerEffects")
+
     g_pEffectsManager.ExecuteEffectEventsForRoom(EFFECT_ROOM_END_FUNC, g_RunRoom);
-    // @endif
     
     g_pInstanceManager.PerformEvent(EVENT_OTHER_ENDROOM, 0);
 
-    // @if feature("particles")
     ParticleSystem_RemoveAllFromLayers();
-    // @endif
     
-    // @if function("virtual_key_*")
     DeleteAllVirtualKeys();    
-    // @endif
 
     // Extract all persistent instances from the room currently in use.
     // NB: This is done first since clearing the rooms m_Active list means that if
@@ -1233,9 +1196,7 @@ function StartRoom( _numb, _starting )
 
     // Some global initialization	
 	//g_pIOManager.Clear();
-    /// @if feature("gamepad")
 	g_pGamepadManager.Clear();
-    /// @endif
 
 	// Kill all particles currently in flight
 	//ParticleSystem_ClearParticles();          // don't do this, to match C++ runner
@@ -1300,26 +1261,20 @@ function StartRoom( _numb, _starting )
     CreateRoomBackgrounds( g_RunRoom );
     
     // Initialise effects
-    // @if feature("layerEffects")
     g_pEffectsManager.Init();
-    // @endif
 
     // Set up runtime data for this room's layers
     if(g_pLayerManager!=null)
         g_pLayerManager.BuildRoomLayerRuntimeData(g_RunRoom);
 
-    // @if feature("particles")
     ParticleSystem_AddAllToLayers();
-    // @endif
 
 	// If this room is NOT persistent then we need to recreate all instances EXCEPT those that already exist in the persistent list
 	// Any instance created in here will perform the create event... including "new" PERSISTENT instances
 	if (ispersistent === false)
 	{
 	    // Build the physics world for this room if not persistent and one is required
-        // @if feature("physics")
 	    g_RunRoom.BuildPhysicsWorld();
-        // @endif
 	    
         // Loop through all instances in the storage of the room and create the ones NOT in the persistent list...
         g_RunRoom.ClearInstances(false);
@@ -1394,9 +1349,7 @@ function StartRoom( _numb, _starting )
     for (var u=0; u < persistent.length; u++)
     {
         g_RunRoom.m_Active.Add(persistent[u]);
-        // @if feature("physics")
         persistent[u].RebuildPhysicsBody();
-        // @endif
 
         // Add persistent object to layer system
         if (g_isZeus)
@@ -1453,9 +1406,7 @@ function StartRoom( _numb, _starting )
     }    
     
     g_pInstanceManager.PerformEvent(EVENT_OTHER_STARTROOM,0);
-    // @if feature("layerEffects")
     g_pEffectsManager.ExecuteEffectEventsForRoom(EFFECT_ROOM_START_FUNC, g_RunRoom);
-    // @endif
     
     g_RunRoom.m_Initialised = true;
 
@@ -1508,13 +1459,11 @@ function    StartGame()
 	g_pBuiltIn.fps = Fps;
 	g_pBuiltIn.fps_real = Fps;
 
-    // @if feature("audio")
     if(g_AudioModel == Audio_WebAudio)
     {
         // Audio: Report current device status to the newly created room
         Audio_EngineReportState();
     }
-    // @endif audio
 }
 
 // #############################################################################################
@@ -1573,15 +1522,13 @@ function Run_EndGame(_reset) {
 	}
 	g_pInstanceManager.Clear();
 
-	// @if feature("audio")
-    if (_reset) {
+	if (_reset) {
 		// Just stops all audio instances.
 		audio_stop_all();
 	} else {
 		// Destroys the AudioContext instance.
 		Audio_Quit();
 	}
-    // @endif audio
 }
 
 
@@ -1623,7 +1570,7 @@ function UpdateActiveLists() {
 ///          </summary>
 // #############################################################################################
 function UpdateInstancePositions() {
-    // @if feature("physics")
+
     if (g_RunRoom.m_pPhysicsWorld) {
         if(g_isZeus)
         {
@@ -1632,9 +1579,9 @@ function UpdateInstancePositions() {
         else
             g_RunRoom.m_pPhysicsWorld.Update(g_RunRoom.m_speed);
     }
-    else // ->
-    // @endif
-    g_pInstanceManager.UpdatePositions();	
+    else {
+        g_pInstanceManager.UpdatePositions();	
+    }
 }
 
 // #############################################################################################
@@ -1659,16 +1606,12 @@ function    GameMaker_DoAStep() {
 	g_pBuiltIn.delta_time = (g_CurrentTime - g_pBuiltIn.last_time)*1000;
 	g_pBuiltIn.last_time = g_CurrentTime;
 
-    // @if feature("sequences_min")
     ResetSpriteMessageEvents();
-    // @endif sequences_min
     
 	g_pIOManager.StartStep();	
 	HandleOSEvents();
 	
-    /// @if feature("gamepad")
 	g_pGamepadManager.Update();
-    /// @endif
 	g_pInstanceManager.RememberOldPositions();                     	// Remember old positions
 	
 	g_pInstanceManager.UpdateImages();
@@ -1678,9 +1621,7 @@ function    GameMaker_DoAStep() {
     g_pLayerManager.UpdateLayers();
 
     // Handle events that must react to the old position
-    // @if feature("sequences")
     g_pSequenceManager.PerformInstanceEvents(g_RunRoom, EVENT_STEP_BEGIN);
-    // @endif
 	g_pInstanceManager.PerformEvent(EVENT_STEP_BEGIN, 0);
 	UpdateActiveLists();
 	if (New_Room != -1) return;
@@ -1709,9 +1650,7 @@ function    GameMaker_DoAStep() {
 	UpdateActiveLists();
 	if (New_Room != -1) return;
 
-	// @if feature("keyboard")
-    HandleKeyboard();
-    // @endif
+	HandleKeyboard();
 	UpdateActiveLists();
 	if (New_Room != -1) return;
 
@@ -1721,21 +1660,15 @@ function    GameMaker_DoAStep() {
 	HandleMouse();
 	UpdateActiveLists();
 	if (New_Room != -1) return;
-    
-    // @if feature("layerEffects")
+
     g_pEffectsManager.StepEffectsForRoom(g_RunRoom);
-    // @endif
-    // @if feature("sequences")
 	g_pSequenceManager.UpdateInstancesForRoom(g_RunRoom);                   // update this at the same time as the step event
 	g_pSequenceManager.PerformInstanceEvents(g_RunRoom, EVENT_STEP_NORMAL);
-    // @endif
 	g_pInstanceManager.PerformEvent(EVENT_STEP_NORMAL, 0);                 	//HandleStep(EVENT_STEP_END);	
     UpdateActiveLists();
     if (New_Room != -1) return;
 
-    // @if feature("sequences_min")
     ProcessSpriteMessageEvents();
-    // @endif sequences_min
 
     UpdateInstancePositions();
 
@@ -1753,17 +1686,13 @@ function    GameMaker_DoAStep() {
 	UpdateActiveLists();
 	if (New_Room != -1) return;
 
-	// @if feature("sequences")
-    g_pSequenceManager.PerformInstanceEvents(g_RunRoom, EVENT_STEP_END);
-    // @endif
+	g_pSequenceManager.PerformInstanceEvents(g_RunRoom, EVENT_STEP_END);
 	g_pInstanceManager.PerformEvent(EVENT_STEP_END, 0);                 	//HandleStep(EVENT_STEP_END);
     UpdateActiveLists();
     if (New_Room != -1) return;
 
 	// Handle the particle systems
-    // @if feature("particles")
 	ParticleSystem_UpdateAll();
-    // @endif
 
 
 	// Bookkeeping && drawing
@@ -1786,9 +1715,7 @@ function    GameMaker_DoAStep() {
 
 	RenderSystemOverlays();
 	
-	// @if feature("audio")
-    audio_update();
-    // @endif audio
+	audio_update();
 }
 
 
@@ -2098,6 +2025,22 @@ function IntToHex(_val)
     }
     return s;
 }
+function YYUDID()
+{
+    //Needs to return a udid for the machine we are running on
+ 
+    var fingerprint = new Fingerprint().get();
+
+
+    return fingerprint;
+
+    //    return "e2770c0a-928f-4985-b331-cf6e2c3c56b5";
+}
+// #############################################################################################
+/// Function:<summary>
+///             Process HTML5 "pingback"
+///          </summary>
+// #############################################################################################
 
 function StringToArray8(str) 
 {
@@ -2261,8 +2204,17 @@ function GameMaker_Tick()
     }
     
     //
-    g_GameTimer.Update();
-    var TargetSpeed = g_GameTimer.GetFPS();
+    var TargetSpeed;
+    if (g_isZeus) {
+        g_GameTimer.Update();
+        TargetSpeed = g_GameTimer.GetFPS();
+    } else {
+        TargetSpeed = g_RunRoom.GetSpeed();
+        if (TargetSpeed <= 0) {
+            TargetSpeed = 1;
+            g_RunRoom.SetSpeed(1);
+        }
+    }
 
     const last_time_ms = g_CurrentTime;
     g_CurrentTime = Date.now();
@@ -2381,9 +2333,7 @@ function GameMaker_Tick()
     }
     
 	// if in DEBUG mode, do debug "stuff"
-    // @if feature("debug")
 	if (g_pGMFile.Options && g_pGMFile.Options.debugMode) {
 	    UpdateDebugWindow();
     }
-    // @endif
 }

@@ -1,4 +1,3 @@
-// @if feature("audio_effects")
 function EQEffectStruct(_params) {
     AudioEffectStruct.call(this, AudioEffect.Type.EQ);
     Object.setPrototypeOf(this, AudioEffectStruct.prototype);
@@ -179,4 +178,3 @@ function EQEffectStruct(_params) {
 EQEffectStruct.paramDescriptors = () => ({
     bypass: AudioEffectStruct.paramDescriptors().bypass
 });
-// @endif

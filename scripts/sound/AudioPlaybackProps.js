@@ -1,4 +1,3 @@
-// @if feature("audio")
 var AudioPlaybackType = {
     NON_POSITIONAL: 0,
     POSITIONAL_SPECIFIED: 1,
@@ -34,8 +33,7 @@ function AudioPlaybackProps(_props) {
     this.getProp(_props, "pitch", this, "pitch", true, yyGetReal, AudioPropsCalc.default_pitch);
     this.pitch = Math.max(0.0, this.pitch);
 
-    this.getProp(_props, "position", this, "position", true, undefined, undefined);
-    if (typeof this.position === "object" && this.type === undefined) {
+    if (typeof _props.gmlposition === "object" && this.type === undefined) {
             this.type = AudioPlaybackType.POSITIONAL_SPECIFIED;
 
             const position = (_props.position !== undefined) ? _props.position : _props.gmlposition;
@@ -56,10 +54,6 @@ function AudioPlaybackProps(_props) {
 
 AudioPlaybackProps.prototype.getProp = function(_srcObj, _srcKey, _destObj, _destKey, 
     _gmlPrefix, _converterFn, _default) {
-    if (_converterFn === undefined) {
-        _converterFn = (x) => x; 
-    }
-
     if (_srcObj[_srcKey] !== undefined) {
         _destObj[_destKey] = _converterFn(_srcObj[_srcKey]);
         return true;
@@ -97,4 +91,3 @@ AudioPlaybackProps.prototype.invalid = function() {
 
     return false;
 };
-// @endif audio

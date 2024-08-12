@@ -15,9 +15,9 @@
 // 
 // **********************************************************************************************************************
 
-function GetParticleSystemResourceIndex(_arg, _optional)
+function GetParticleSystemResourceIndex(_arg)
 {
-    return yyGetRef(_arg, REFID_PARTICLESYSTEM, CParticleSystem.instances.length, CParticleSystem.instances, _optional);
+    return yyGetRef(_arg, REFID_PARTICLESYSTEM, CParticleSystem.instances.length, CParticleSystem.instances);
 }
 
 function GetParticleSystemInstanceIndex(_arg, _optional)
@@ -77,12 +77,21 @@ function GetLayer(_layerID)
     return layer;
 }
 
-function ParticleSystemGetInfoImpl(_ind, _isInstance)
+// #############################################################################################
+/// Function:<summary>
+///          </summary>
+///
+/// In:		<param name="_ind"></param>
+/// Out:	<returns>
+///			</returns>
+// #############################################################################################
+function particle_get_info(_ind)
 {
     var pPSI = undefined;
     var emitters = [];
 
-    if (_isInstance)
+    if (_ind instanceof YYRef
+        && _ind.type == REFID_PART_SYSTEM)
     {
         // Particle system INSTANCE
         _ind = GetParticleSystemInstanceIndex(_ind);
@@ -221,37 +230,6 @@ function ParticleSystemGetInfoImpl(_ind, _isInstance)
     variable_struct_set(pPSI, "emitters", emittersArray);
 
     return pPSI;
-}
-
-// @if feature("particles")
-// #############################################################################################
-/// Function:<summary>
-///          </summary>
-///
-/// In:		<param name="_ind"></param>
-/// Out:	<returns>
-///			</returns>
-// #############################################################################################
-function particle_get_info(_ind)
-{
-    var isInstance = ((_ind instanceof YYRef) && _(ind.type == REFID_PART_SYSTEM));
-    return ParticleSystemGetInfoImpl(_ind, isInstance);
-}
-
-// #############################################################################################
-/// Function:<summary>
-///          	Checks whether a particle system asset with given index exists.
-///          </summary>
-///
-/// In:		<param name="_ind"></param>
-/// Out:	<returns>
-///				
-///			</returns>
-// #############################################################################################
-function particle_exists(_ind)
-{
-    var ps = GetParticleSystemResourceIndex(_ind, true);
-    return (CParticleSystem.Get(ps) != null);
 }
 
 // #############################################################################################
@@ -1431,8 +1409,6 @@ function part_emitter_relative(_ps, _ind, _enable)
     return ParticleSystem_Emitter_Relative(_ps, _ind, _enable);
 }
 
-// @endif particles
-
 // #############################################################################################
 /// Function:<summary>
 ///          	Creates an effect of the given kind (see above) at the indicated position. 
@@ -1450,9 +1426,7 @@ function part_emitter_relative(_ps, _ind, _enable)
 // #############################################################################################
 function effect_create_below(_kind, _x, _y, _size, _color)
 {
-    if (ps_below == -1)
-        Eff_Check_Systems();
-    Effect_Create(ps_below, yyGetInt32(_kind), yyGetReal(_x), yyGetReal(_y), yyGetInt32(_size), yyGetInt32(_color));
+	Effect_Create(ps_below, yyGetInt32(_kind), yyGetReal(_x), yyGetReal(_y), yyGetInt32(_size), yyGetInt32(_color));
 }
 
 // #############################################################################################
@@ -1472,9 +1446,7 @@ function effect_create_below(_kind, _x, _y, _size, _color)
 // #############################################################################################
 function effect_create_above(_kind, _x, _y, _size, _color)
 {
-    if (ps_above == -1)
-        Eff_Check_Systems();
-    Effect_Create(ps_above, yyGetInt32(_kind), yyGetReal(_x), yyGetReal(_y), yyGetInt32(_size), yyGetInt32(_color));
+	Effect_Create(ps_above, yyGetInt32(_kind), yyGetReal(_x), yyGetReal(_y), yyGetInt32(_size), yyGetInt32(_color));
 }
 
 // #############################################################################################
@@ -1591,9 +1563,4 @@ function part_system_global_space(_ind, _enable)
 {
     _ind = GetParticleSystemInstanceIndex(_ind);
     return ParticleSystem_GlobalSpace(_ind, _enable);
-}
-
-function part_system_get_info(_ind)
-{
-    return ParticleSystemGetInfoImpl(_ind, true);
 }

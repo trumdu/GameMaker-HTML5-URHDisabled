@@ -14,7 +14,6 @@
 // 
 // **********************************************************************************************************************
 
-// @if feature("nineslice")
 var NINESLICE_TILE_STRETCH = 0,
     NINESLICE_TILE_REPEAT = 1,
     NINESLICE_TILE_MIRROR = 2,
@@ -753,7 +752,7 @@ yyNineSliceData.prototype.DrawFromCache = function (_x, _y, _rot, _colour, _alph
     var a = (_alpha * 255.0) << 24;
     var _col = a | _colour;
 
-    var maxtrisinrun = ~~(DEFAULT_VB_SIZE / 3);     // not sure if this is actually the max we support but it's a reasonable value
+    var maxtrisinrun = DEFAULT_VB_SIZE / 3;     // not sure if this is actually the max we support but it's a reasonable value
     var trisremaining = (this.cache.verts.length / 2) / 3;
 
     var srcvert = this.cache.verts;
@@ -1942,7 +1941,6 @@ yyNineSliceData.prototype.Draw = function (_x, _y, _width, _height, _rot, _colou
 
         if (g_webGL)
         {
-            // @if feature("gl")
             for (i = 0; i < 4; i++)
             {
                 // Rescale texture coordinates into texture space
@@ -2119,11 +2117,9 @@ yyNineSliceData.prototype.Draw = function (_x, _y, _width, _height, _rot, _colou
                     bindex += stride;
                 }
             }
-            // @endif
         }
         else
         {
-            // @if feature("2d")
             graphics.globalAlpha = _alpha;
 
             if (_colour != g_CacheWhite)
@@ -2169,8 +2165,6 @@ yyNineSliceData.prototype.Draw = function (_x, _y, _width, _height, _rot, _colou
                     Graphics_SetTransform();
                 }
             }
-            // @endif
         }
     }
 };
-// @endif

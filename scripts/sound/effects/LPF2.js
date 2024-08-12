@@ -1,4 +1,3 @@
-// @if feature("audio_effects")
 function LPF2EffectStruct(_params) {
     AudioEffectStruct.call(this, AudioEffect.Type.LPF2);
     Object.setPrototypeOf(this, AudioEffectStruct.prototype);
@@ -49,4 +48,3 @@ LPF2EffectStruct.paramDescriptors = () => ({
         return this.freq;
     } 
 });
-// @endif

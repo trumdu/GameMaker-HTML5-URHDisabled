@@ -96,8 +96,6 @@
     EVENT_GESTURE     =   0xD00,
     EVENT_PRE_CREATE  =   0xE00,
 
-    EVENT_TYPE_MASK   = 0xF00,
-
 	EVENT_STEP_NORMAL         = EVENT_STEP|1,
 	EVENT_STEP_BEGIN          = EVENT_STEP|2,
 	EVENT_STEP_END            = EVENT_STEP|3,
@@ -114,8 +112,7 @@
 	EVENT_OTHER_NOHEALTH      = EVENT_OTHER|10,
 	EVENT_OTHER_CLOSEBUTTON   = EVENT_OTHER|11,		
 
-	EVENT_OTHER_USER0 = EVENT_OTHER|14,
-	// @if event("UserEvent*")
+    EVENT_OTHER_USER0 = EVENT_OTHER|14,
     EVENT_OTHER_USER1 = EVENT_OTHER|15,
     EVENT_OTHER_USER2 = EVENT_OTHER|16,
     EVENT_OTHER_USER3 = EVENT_OTHER|17,
@@ -130,10 +127,8 @@
     EVENT_OTHER_USER12= EVENT_OTHER|26,
     EVENT_OTHER_USER13= EVENT_OTHER|27,
     EVENT_OTHER_USER14= EVENT_OTHER|28,
-    EVENT_OTHER_USER15= EVENT_OTHER|29,
-	// @endif
+    EVENT_OTHER_USER15= EVENT_OTHER|29,    
     
-	// @if event("OutsideView*")
     EVENT_OTHER_OUTSIDE_VIEW0 = EVENT_OTHER|30,
     EVENT_OTHER_OUTSIDE_VIEW1 = EVENT_OTHER|31,
     EVENT_OTHER_OUTSIDE_VIEW2 = EVENT_OTHER|32,
@@ -142,9 +137,7 @@
     EVENT_OTHER_OUTSIDE_VIEW5 = EVENT_OTHER|35,
     EVENT_OTHER_OUTSIDE_VIEW6 = EVENT_OTHER|36,
     EVENT_OTHER_OUTSIDE_VIEW7 = EVENT_OTHER|37,
-	// @endif
     
-	// @if event("BoundaryView*")
     EVENT_OTHER_BOUNDARY_VIEW0 = EVENT_OTHER|40,
     EVENT_OTHER_BOUNDARY_VIEW1 = EVENT_OTHER|41,
     EVENT_OTHER_BOUNDARY_VIEW2 = EVENT_OTHER|42,
@@ -153,7 +146,6 @@
     EVENT_OTHER_BOUNDARY_VIEW5 = EVENT_OTHER|45,
     EVENT_OTHER_BOUNDARY_VIEW6 = EVENT_OTHER|46,
     EVENT_OTHER_BOUNDARY_VIEW7 = EVENT_OTHER|47,
-	// @endif
     
     EVENT_OTHER_ANIMATIONUPDATE = EVENT_OTHER | 58,
     EVENT_OTHER_ANIMATIONEVENT = EVENT_OTHER | 59,
@@ -271,7 +263,6 @@ EVENT_GESTURE_GLOBAL_ROTATE_END = EVENT_GESTURE | 77,
 
 
     GML_EVENT_OTHER_USER0 = 10,
-	// @if event("UserEvent*")
     GML_EVENT_OTHER_USER1 = 11,
     GML_EVENT_OTHER_USER2 = 12,
     GML_EVENT_OTHER_USER3 = 13,
@@ -286,8 +277,7 @@ EVENT_GESTURE_GLOBAL_ROTATE_END = EVENT_GESTURE | 77,
     GML_EVENT_OTHER_USER12 =22,
     GML_EVENT_OTHER_USER13 =23,
     GML_EVENT_OTHER_USER14 =24,
-    GML_EVENT_OTHER_USER15= 25,
-	// @endif
+    GML_EVENT_OTHER_USER15= 25, 
 
 GML_MOUSE_LeftButton = 0,
 GML_MOUSE_RightButton = 1,
@@ -380,7 +370,6 @@ GML_EVENT_STEP_NORMAL = 0,
 	GML_EVENT_OTHER_ENDOFPATH = 8,
 	GML_EVENT_OTHER_NOHEALTH = 9,
 	GML_EVENT_OTHER_CLOSEBUTTON = 30,
-	// @if event("OutsideView*")
 	GML_EVENT_OTHER_OUTSIDE_VIEW0 = 40,
 	GML_EVENT_OTHER_OUTSIDE_VIEW1 = 41,
 	GML_EVENT_OTHER_OUTSIDE_VIEW2 = 42,
@@ -389,8 +378,6 @@ GML_EVENT_STEP_NORMAL = 0,
 	GML_EVENT_OTHER_OUTSIDE_VIEW5 = 45,
 	GML_EVENT_OTHER_OUTSIDE_VIEW6 = 46,
 	GML_EVENT_OTHER_OUTSIDE_VIEW7 = 47,
-	// @endif
-	// @if event("BoundaryView*")
 	GML_EVENT_OTHER_BOUNDARY_VIEW0 = 50,
 	GML_EVENT_OTHER_BOUNDARY_VIEW1 = 51,
 	GML_EVENT_OTHER_BOUNDARY_VIEW2 = 52,
@@ -398,12 +385,28 @@ GML_EVENT_STEP_NORMAL = 0,
 	GML_EVENT_OTHER_BOUNDARY_VIEW4 = 54,
 	GML_EVENT_OTHER_BOUNDARY_VIEW5 = 55,
 	GML_EVENT_OTHER_BOUNDARY_VIEW6 = 56,
-	GML_EVENT_OTHER_BOUNDARY_VIEW7 = 57,
-	// @endif	
+	GML_EVENT_OTHER_BOUNDARY_VIEW7 = 57,	
 	
 	GML_EVENT_OTHER_ANIMATIONUPDATE = 58,
     GML_EVENT_OTHER_ANIMATIONEVENT = 59,
-	
+
+	GML_ev_user0 = 10,
+	GML_ev_user1 = 11,
+	GML_ev_user2 = 12,
+	GML_ev_user3 = 13,
+	GML_ev_user4 = 14,
+	GML_ev_user5 = 15,
+	GML_ev_user6 = 16,
+	GML_ev_user7 = 17,
+	GML_ev_user8 = 18,
+	GML_ev_user9 = 19,
+	GML_ev_user10 = 20,
+	GML_ev_user11 = 21,
+	GML_ev_user12 = 22,
+	GML_ev_user13 = 23,
+	GML_ev_user14 = 24,
+	GML_ev_user15 = 25,
+
 	GML_EVENT_OTHER_WEB_IMAGE_LOAD = 60,
 	GML_EVENT_OTHER_WEB_SOUND_LOAD = 61,
     GML_EVENT_OTHER_WEB_ASYNC = 62,
@@ -421,8 +424,7 @@ GML_EVENT_STEP_NORMAL = 0,
 
     GML_EVENT_OTHER_BROADCAST_MESSAGE = 76,
 
-    // @if eventType("KeyPress")
-	GML_EVENT_KEYPRESS_NOKEY    =   EVENT_KEYPRESS|0,
+    GML_EVENT_KEYPRESS_NOKEY    =   EVENT_KEYPRESS|0,
     GML_EVENT_KEYPRESS_ANY   =   EVENT_KEYPRESS|1,
     GML_EVENT_KEYPRESS_ANYKEY = EVENT_KEYPRESS | 1,
     GML_EVENT_KEYPRESS_BACKSPACE = EVENT_KEYPRESS | 8,
@@ -527,11 +529,9 @@ GML_EVENT_STEP_NORMAL = 0,
 	GML_EVENT_KEYPRESS_NUM_MINUS = EVENT_KEYPRESS | 109,
 	GML_EVENT_KEYPRESS_NUM_DOT = EVENT_KEYPRESS | 110,
 	GML_EVENT_KEYPRESS_NUM_DIV = EVENT_KEYPRESS | 111,
-	// @endif
 
 
 	// KeyDOWN events...
-	// @if eventType("Keyboard")
 	GML_EVENT_KEYBOARD_NOKEY = EVENT_KEYBOARD | 0,
 	GML_EVENT_KEYBOARD_ANY = EVENT_KEYBOARD | 1,
 	GML_EVENT_KEYBOARD_ANYKEY = EVENT_KEYBOARD | 1,
@@ -637,11 +637,9 @@ GML_EVENT_STEP_NORMAL = 0,
 	GML_EVENT_KEYBOARD_NUM_MINUS = EVENT_KEYBOARD | 109,
 	GML_EVENT_KEYBOARD_NUM_DOT = EVENT_KEYBOARD | 110,
 	GML_EVENT_KEYBOARD_NUM_DIV = EVENT_KEYBOARD | 111,
-	// @endif
 
 
 	// Key Released 
-	// @if eventType("KeyRelease")
 	GML_EVENT_KEYRELEASE_NOKEY = EVENT_KEYRELEASE | 0,
 	GML_EVENT_KEYRELEASE_ANY = EVENT_KEYRELEASE | 1,
     GML_EVENT_KEYRELEASE_ANYKEY = EVENT_KEYRELEASE | 1,
@@ -747,7 +745,6 @@ GML_EVENT_STEP_NORMAL = 0,
 	GML_EVENT_KEYRELEASE_NUM_MINUS = EVENT_KEYRELEASE | 109,
 	GML_EVENT_KEYRELEASE_NUM_DOT = EVENT_KEYRELEASE | 110,
 	GML_EVENT_KEYRELEASE_NUM_DIV = EVENT_KEYRELEASE | 111,
-	// @endif
 
 
 
@@ -871,7 +868,12 @@ Audio_WebAudio=1,
 	g_pTempTPE =null,
 	g_VirtualKeyDrawList =null,
 	g_HighScoreValues =null,
+	g_HighScoreNames =null,
+	g_HiscoreCaption =null,
 	g_HighscoreNobody =null,
+	g_HighscoreEscape =null,
+	g_HiscoreFont =null,
+	g_HiscoreFontStyle =null,
 	g_Arguments =null,
 	g_ArgumentIndex =null,
 	g_ArgumentValue =null,
@@ -911,6 +913,7 @@ Audio_WebAudio=1,
 
     g_AudioModel = Audio_Sound,
 // assign to true
+    g_HiscoreFontBorder =true,    
 	Draw_Automatic = true,             // Whether to automatically draw the room each step
 
 // assign to false
@@ -960,6 +963,11 @@ Audio_WebAudio=1,
     g_LastCanvasWidth =  0,
 	g_LastCanvasHeight =  0,
 	g_DynamicTileID = 0,
+	g_HiscoreBackgroundColour = 0,
+	g_HiscoreNewColour = 0,
+	g_HiscoreOtherColour = 0,
+	g_HiscoreFontSize = 0,
+	g_HiscoreBackground = 0,
  
 	g_AsyncUserID =  0,
 	g_LastEventpObject = 0,
@@ -1031,13 +1039,6 @@ Audio_WebAudio=1,
     g_CanvasName = 'canvas',
     g_Hex='0123456789ABCDEF';
 
-/// With conditional compilation enabled, the call will be replaced with `expr`
-/// if `ident` (typically the function name) is used in GML code and will be stripped otherwise.
-/// If called with one argument, `expr` is presumed to be `ident` and `ident` is the first token
-/// of the expression (like `fun` in `compile_if_used(fun = fun_impl)`)
-function compile_if_used() {}
-/// Akin to above, but works based on referenes in final JS code.
-function compile_if_weak_ref(ident, expr) {}
 
 // #############################################################################################
 /// Function:<summary>
@@ -1113,8 +1114,7 @@ function    InitAboyneGlobals() {
     InitFastCRC();
     DetectBrowser();
 
-    // @if feature("audio")
-	if(g_AudioModel!= Audio_NoAudio) {
+    if(g_AudioModel!= Audio_NoAudio) {
         
         try {
         var pAudioTest = new Audio();
@@ -1132,7 +1132,6 @@ function    InitAboyneGlobals() {
           
         }
     }
-	// @endif audio
 
     if (g_canPlayMp3) debug("Browser CAN play MP3");
     if (g_canPlayOgg) debug("Browser CAN play OGG");
@@ -1164,9 +1163,7 @@ function    InitAboyneGlobals() {
     g_ParticleTextures = [];
     g_ParticleTypes = [];
     g_ParticleSystems = [];
-	// @if function("ds_grid_*")
     g_ActiveGrids = new yyAllocate(5);
-	// @endif
     g_ActivePriorityQueues = new yyAllocate(5);
     g_BufferStorage = new yyAllocate(5);
     g_ListCollection = new yyAllocate(5);
@@ -1208,17 +1205,23 @@ function    InitAboyneGlobals() {
             g_RootDir = g_pGMFile.Options.GameDir + '/';
         } 
     }
-	// @if function("virtual_key_*")
     g_VirtualKeyDrawList = [];
-	// @endif
 	g_HighScoreValues = [];
 	g_HighScoreNames = [];
 
+	g_HiscoreCaption = "Hiscore Table";
 	g_HighscoreNobody = "<Nobody>";
-	
-    // @if function("draw_highscore") || function("highscore_*")
+	g_HighscoreEscape ="Press <ESC> to Continue";
+	g_HiscoreBackgroundColour = 0x000000;
+	g_HiscoreBackground = -1;
+	g_HiscoreNewColour = 0xffff00;
+	g_HiscoreOtherColour = 0xffffff;
+    g_HiscoreFont = "verdana";
+    g_HiscoreFontSize = 16;
+    g_HiscoreFontStyle = "";
+    g_HiscoreFontBorder = true;
+    
     highscore_clear();
-	// @endif
     
     g_GUIWidth = -1;
     g_GUIHeight = -1;
@@ -1263,7 +1266,17 @@ function    InitAboyneGlobals() {
     g_room_maxid = 100000;
     g_GlobalAlpha = 1.0;
     
-    draw_set_color(g_pGMFile.Options.DrawColour);
+    if(g_isZeus)
+    {
+        draw_set_colour(g_pGMFile.Options.DrawColour);
+    }
+    else
+    {
+        g_GlobalColour_GM = 0x00000000;
+        g_GlobalColour = 0x000000; // 0xffffff;
+        g_GlobalColour_HTML_RGB = GetHTMLRGB(g_GlobalColour);
+        g_GlobalColour_HTML_RGBA = GetHTMLRGBA(g_GlobalColour,g_GlobalAlpha);
+    }
 
     c_black = GetHTMLRGB(0x000000);
     c_white = GetHTMLRGB(0xffffff);
@@ -1429,12 +1442,12 @@ function    ConvertGMColour( _col ){ return (((_col&0xff)<<16) | (_col&0xff00) |
 // #############################################################################################
 function Timing_Wait( _slp )
 {
-	var StartTime = get_timer();
+	var StartTime = YoYo_GetTimer();
 
 	// very simple delay loop - a proper sleep would be better.
 	while(_slp>0)
 	{
-		var CurrTime= get_timer();
+		var CurrTime= YoYo_GetTimer();
 		_slp -= (CurrTime-StartTime);
 		StartTime = CurrTime;
 	}
@@ -1985,7 +1998,8 @@ function DetectBrowser()
 	{
 		if (document.URL.substring(0, 5) == "file:")
 		{
-			alert("WARNING:  Running this via a file and not a web server is not advised as the browser will enable additional security, and things like files and colours won't work correctly.\r\rPlease check the FAQ for more details.\r\rhttps://help.yoyogames.com/hc/en-us/articles/360011372851");
+			alert("WARNING:  Running this via a file and not a web server is not advised as the browser will enable additional security, and things like files and colours won't work correctly. " +
+			chr(13) + chr(13) + "Please check the FAQ for more details. " + chr(13) + chr(13) + "https://help.yoyogames.com/hc/en-us/articles/360011372851");
 		}
 	}
 }

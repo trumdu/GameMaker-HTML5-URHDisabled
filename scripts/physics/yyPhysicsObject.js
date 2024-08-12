@@ -13,7 +13,6 @@
 // 15/02/2012		1.0         CPH     1st version
 // 
 // **********************************************************************************************************************
-// @if feature("physics")
 /** @constructor */
 function yyPhysicsObject(_b2Body, _collisionCategory, _xo, _yo) {
 	    		
@@ -457,4 +456,3 @@ yyPhysicsObject.prototype.SetRestitution = function(_fixtureIndex, _val) {
         this.m_fixtures[_fixtureIndex].SetRestitution(_val);
     }    
 };
-// @endif

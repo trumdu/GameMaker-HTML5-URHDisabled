@@ -200,27 +200,6 @@ yyBackgroundManager.prototype.Get = function (_index) {
 
 // #############################################################################################
 /// Function:<summary>
-///             Retrieves an array of all tile set asset IDs.
-///          </summary>
-///
-/// Out:	 <returns>
-///				An array of all tile set asset IDs.
-///			 </returns>
-// #############################################################################################
-yyBackgroundManager.prototype.List = function () {
-	var ids = [];
-	for (var i = 0; i < this.images.length; ++i)
-	{
-		if (this.images[i])
-		{
-			ids.push(i);
-		}
-	}
-	return ids;
-};
-
-// #############################################################################################
-/// Function:<summary>
 ///             Delete a background IMAGE
 ///          </summary>
 ///

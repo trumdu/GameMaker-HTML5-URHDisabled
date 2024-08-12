@@ -66,35 +66,33 @@ function IsStateful(_ts)
 		|| type == eTimeSourceType_Configurable);
 }
 
-function GetTimeSourceWithId(id) {
-	const ts = g_TimeSourceMap.get(id);
+function GetTimeSourceWithId(_id)
+{
+	const visibleBuiltInSources = [
+		g_GlobalTimeSource,
+		g_GameTimeSource
+	];
 
-	if (ts === undefined)
-		return null;
+	for (const source of visibleBuiltInSources)
+	{
+		const ts = source.FindSourceWithId(_id);
 
-	return ts;
-}
+		if (ts != null)
+		{
+			if (IsConfigurable(ts))
+			{
+				// The time source is considered destroyed - its actual destruction has just been slightly delayed
+				if (ts.IsMarkedForDestruction())
+				{
+					return null;
+				}
+			}
 
-function AddToMap(id, ts) {
-	g_TimeSourceMap.set(id, ts);
-}
-
-function EraseFromMap(id) {
-	const ts = GetTimeSourceWithId(id);
-
-	if (ts === null) {
-		return;
+			return ts;
+		}
 	}
 
-	const children = ts.GetChildren();
-
-	children.forEach(child => EraseFromMap(child.GetId()));
-
-	if (id === eTimeSource_Global || id === eTimeSource_Game) {
-		return;
-	}
-
-	g_TimeSourceMap.delete(id);
+	return null;
 }
 
 function time_source_create(_parent, _period, _units, _callback, _args = [],
@@ -121,11 +119,7 @@ function TimeSource_Create(_parent, _period, _units, _callback, _args, _reps, _e
 
 		if (ts != null)
 		{
-			const id = ts.GetId();
-			
-			AddToMap(id, ts);
-
-			return id;
+			return ts.GetId();
 		}
 
 		CreationError();
@@ -163,8 +157,6 @@ function TimeSource_Destroy(_id)
 		{
 			if (ts.GetNumChildren() == 0)
 			{
-				EraseFromMap(_id);
-
 				if (ts.IsLocked())
 				{
 					return ts.MarkForDestruction(false);
@@ -188,8 +180,6 @@ function TimeSource_DestroyTree(_id)
 
 	if (ts != null)
 	{
-		EraseFromMap(_id);
-
 		// If there is a source in the tree which is executing its callback
 		if (ts.FindLockedSource())
 		{

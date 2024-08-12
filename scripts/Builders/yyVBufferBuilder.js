@@ -92,22 +92,20 @@ function yyVBufferBuilder(_size) {
 
     // #############################################################################################
     /// Function:<summary>
-    ///             Resizes the buffer if its size is different than the size provided.
+    ///             Resizes the buffer 
     ///          </summary>
     // #############################################################################################
     /** @this {yyVBufferBuilder} */	
     this.Resize = function (_size) {
-        if (m_arrayBuffer.byteLength != _size)
-        {
-            var arrayBufferReplacement = new ArrayBuffer(_size);
-                                                        
-            var oldBufferView = new Int8Array(m_arrayBuffer);
-            var newbufferView = new Int8Array(arrayBufferReplacement);
-            newbufferView.set(oldBufferView);
-            
-            m_arrayBuffer = arrayBufferReplacement;
-            m_dataView = new DataView(m_arrayBuffer);
-        }
+
+        var arrayBufferReplacement = new ArrayBuffer(_size);
+    					    					    
+        var oldBufferView = new Int8Array(m_arrayBuffer);
+        var newbufferView = new Int8Array(arrayBufferReplacement);
+        newbufferView.set(oldBufferView);
+        
+        m_arrayBuffer = arrayBufferReplacement;
+        m_dataView = new DataView(m_arrayBuffer);
     };
 
     // #############################################################################################
@@ -143,10 +141,6 @@ function yyVBufferBuilder(_size) {
     };
     
     this.GetFVF = function () { return m_FVF; };
-    this.SetFVF = function (_fvf) {
-        m_FVF = _fvf;
-        m_vertexFormat = g_webGL.GetVertexFormat(_fvf);
-    };
     this.GetFormat = function () { return g_webGL.GetVertexFormat(m_FVF); };
 
     // #############################################################################################
@@ -356,6 +350,7 @@ function yyVBufferBuilder(_size) {
     // #############################################################################################
     /** @this {yyVBufferBuilder} */	
     this.Submit = function(_primType, _texture) {
+
         if (m_frozen) {
 
             // Directly submit the vertex buffer
@@ -368,10 +363,6 @@ function yyVBufferBuilder(_size) {
                 // Check whether the webgl texture has been initialised yet and do so if not
                 if (_texture && !_texture.WebGLTexture.webgl_textureid) {
                     WebGL_BindTexture(_texture.TPE);
-                    if (!WebGL_IsTextureValid(_texture.WebGLTexture.webgl_textureid, WebGL_gpu_get_tex_mip_enable())) {
-                        yyError("vertex_submit: trying to use a texture that does not exist");
-                        return;
-                    }
                 }
                 g_webGL.DispatchVBuffer(_primType, _texture.WebGLTexture.webgl_textureid, m_VBuffer, 0);
             }
@@ -384,10 +375,6 @@ function yyVBufferBuilder(_size) {
                 // Check whether the webgl texture has been initialised yet and do so if not
                 if (_texture && !_texture.WebGLTexture.webgl_textureid) {
                     WebGL_BindTexture(_texture.TPE);
-                    if (!WebGL_IsTextureValid(_texture.WebGLTexture.webgl_textureid, WebGL_gpu_get_tex_mip_enable())) {
-                        yyError("vertex_submit: trying to use a texture that does not exist");
-                        return;
-                    }
                 }
                 pBuff = g_webGL.AllocVerts(_primType, _texture.WebGLTexture.webgl_textureid, m_FVF, m_vertexCount);
             }
@@ -421,10 +408,7 @@ function yyVBufferBuilder(_size) {
         return m_arrayBuffer;
     };
 
-    this.IsFrozen = function ()
-    {
-        return m_frozen;
-    };
+
 }
 
 

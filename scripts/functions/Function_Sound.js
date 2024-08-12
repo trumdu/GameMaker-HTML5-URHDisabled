@@ -14,7 +14,6 @@
 // 
 // **********************************************************************************************************************
 
-// @if feature("audio")
 var audio_sounds = [];
 var BASE_SOUND_INDEX = 300000;
 var audio_sounds_index = BASE_SOUND_INDEX;
@@ -46,15 +45,14 @@ var g_UseDummyAudioBus = {
 };
 
 var DistanceModels = {
-    AUDIO_FALLOFF_NONE: 0,
-	AUDIO_FALLOFF_INVERSE_DISTANCE: 1,
-	AUDIO_FALLOFF_INVERSE_DISTANCE_CLAMPED: 2,
-	AUDIO_FALLOFF_LINEAR_DISTANCE: 3,
-	AUDIO_FALLOFF_LINEAR_DISTANCE_CLAMPED: 4,
-	AUDIO_FALLOFF_EXPONENT_DISTANCE: 5,
-	AUDIO_FALLOFF_EXPONENT_DISTANCE_CLAMPED: 6,
-    AUDIO_FALLOFF_INVERSE_DISTANCE_SCALED: 7,
-    AUDIO_FALLOFF_EXPONENT_DISTANCE_SCALED: 8
+    AUDIO_FALLOFF_NONE:0,
+	AUDIO_FALLOFF_INVERSE_DISTANCE:1,
+	AUDIO_FALLOFF_INVERSE_DISTANCE_CLAMPED:2,
+	AUDIO_FALLOFF_LINEAR_DISTANCE:3,
+	AUDIO_FALLOFF_LINEAR_DISTANCE_CLAMPED:4,
+	AUDIO_FALLOFF_EXPONENT_DISTANCE:5,
+	AUDIO_FALLOFF_EXPONENT_DISTANCE_CLAMPED:6
+
 };
 
 var Channels = {
@@ -1061,7 +1059,6 @@ function Audio_EngineReportState()
     ds_map_destroy(map);
     g_pBuiltIn.async_load = -1;
 }
-// @endif audio
 
 function audio_system_is_available()
 {
@@ -1891,7 +1888,8 @@ function audio_falloff_set_model(_model)
         return; //no change
 
     var tempnode = g_WebAudioContext.createPanner();
-    
+    g_AudioFalloffModel = _model;
+
     switch(_model)
     {
 		case DistanceModels.AUDIO_FALLOFF_NONE:
@@ -1905,49 +1903,28 @@ function audio_falloff_set_model(_model)
 			if (falloff_model == undefined) falloff_model = "inverse";
 			break;
 		case DistanceModels.AUDIO_FALLOFF_INVERSE_DISTANCE_CLAMPED:
-            console.warn("audio_falloff_inverse_distance_clamped is not supported in html5\n");
-            console.log("Note: Falloff will mimic audio_falloff_inverse_distance");
-            falloff_model = tempnode.INVERSE_DISTANCE;
-		    if (falloff_model == undefined) falloff_model = "inverse";
+			debug("Audio_falloff_inverse_distance_clamped not supported in html5\n");
 			break;
 		case DistanceModels.AUDIO_FALLOFF_LINEAR_DISTANCE:
 			falloff_model = tempnode.LINEAR_DISTANCE;
 			if (falloff_model == undefined) falloff_model = "linear";
 			break;
 		case DistanceModels.AUDIO_FALLOFF_LINEAR_DISTANCE_CLAMPED:
-			console.warn("audio_falloff_linear_distance_clamped is not supported in html5\n");
-            console.log("Note: Falloff will mimic audio_falloff_linear_distance");
-			falloff_model = tempnode.LINEAR_DISTANCE;
-			if (falloff_model == undefined) falloff_model = "linear";
+			debug("Audio_falloff_linear_distance_clamped not supported in html5\n");
 			break;
 		case DistanceModels.AUDIO_FALLOFF_EXPONENT_DISTANCE:
 			falloff_model = tempnode.EXPONENTIAL_DISTANCE;
 			if (falloff_model == undefined) falloff_model = "exponential";
 			break;
 		case DistanceModels.AUDIO_FALLOFF_EXPONENT_DISTANCE_CLAMPED:
-			console.warn("audio_falloff_exponent_distance_clamped is not supported in html5\n");
-            console.log("Note: Falloff will mimic audio_falloff_exponent_distance");
-			falloff_model = tempnode.EXPONENTIAL_DISTANCE;
-			if (falloff_model == undefined) falloff_model = "exponential";
+			debug("Audio_falloff_exponent_distance_clamped not supported in html5\n");
+			
 			break;
-        case DistanceModels.AUDIO_FALLOFF_INVERSE_DISTANCE_SCALED:
-            console.warn("audio_falloff_inverse_distance_scaled is not supported in html5\n");
-            console.log("Note: Falloff will mimic audio_falloff_inverse_distance");
-            falloff_model = tempnode.INVERSE_DISTANCE;
-		    if (falloff_model == undefined) falloff_model = "inverse";
-			break;
-        case DistanceModels.AUDIO_FALLOFF_EXPONENT_DISTANCE_SCALED:
-            console.warn("audio_falloff_exponent_distance_scaled is not supported in html5\n");
-            console.log("Note: Falloff will mimic audio_falloff_exponent_distance");
-            falloff_model = tempnode.EXPONENTIAL_DISTANCE;
-			if (falloff_model == undefined) falloff_model = "exponential";
-			break;
-		default:
-			console.warn("Ignored attempt to set audio falloff to unknown model\n");
-			return;
-    }
 
-    g_AudioFalloffModel = _model;
+		default:
+			debug("Attempting to set audio falloff to unknown model\n");
+			break;
+    }
 
     audio_emitters.filter(_emitter => _emitter.isActive() === true)
                   .forEach(_emitter => {
@@ -2431,7 +2408,6 @@ function audio_get_listener_info(index)
 }
 function audio_debug(trueFalse)                             {}
 
-// @if feature("audio")
 //loading -------------------------
 /** @this {XMLHttpRequest} */
 function Audio_SoundError(e)
@@ -2932,7 +2908,6 @@ function AudioGroups_Init()
         }
     }
 }
-// @endif audio
 
 function audio_group_load( _groupId )
 {

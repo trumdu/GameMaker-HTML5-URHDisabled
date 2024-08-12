@@ -418,6 +418,8 @@ function move_bounce_all(_pInst, _adv)
 	Command_Bounce( _pInst, yyGetBool(_adv), true );
 }
 
+var move_bounce = move_bounce_solid;
+
 
 // #############################################################################################
 /// Function:<summary>
@@ -965,8 +967,8 @@ function position_meeting(_pInst,_x,_y,_obj)
 		else
 		{
 			var id = Command_CollisionPoint(_pInst,_x,_y,_obj,true,false);
-			if(id != OBJECT_NOONE)
-				return true;
+			
+			return id;
 		}
 	}
 	else if (_obj instanceof Array)
@@ -985,19 +987,18 @@ function position_meeting(_pInst,_x,_y,_obj)
 			else
 			{
 				var id = Command_CollisionPoint(_pInst,_x,_y,obj2,true,false);
-				if(id!=OBJECT_NOONE)
+				if(id==true)
 					return true;
 			}
 		}
-		
+		return false;
 	}
 	else
 	{
 		var id = Command_CollisionPoint(_pInst,_x,_y,_obj,true,false);
-		if(id!=OBJECT_NOONE)
-			return true;
+		
+		return id;
 	}
-	return false;
 }
 
 
